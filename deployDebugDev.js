@@ -14,7 +14,7 @@ deployContract(web3, contract, sender)
         console.log('Deployment finished')
     })
     .catch(error => {
-        console.log(`Failed to deploy contract: ${Jason.stringify(error)}`);
+        console.log(`Failed to deploy contract: ${JSON.stringify(error)}`); 
     });
 function compileContract() {
     const compilerInput = {
@@ -75,11 +75,11 @@ async function deployContract(web3, contract, sender) {
         //.on('confirmation', (confirmationNumber, receipt) 
         .on( "confirmation",confirmationNumber => {
             console.log(`Confirmation number: ${confirmationNumber}`);               
-        });
+        })
 
-        // .on("error", error => {
-        //      console.log(`Transaction Error: ${error.message}`);
-        //  };
+        .on("error", error => {
+             console.log(`Transaction Error: ${error.message}`);
+         })
 
     console.log(`Contract address: ${contractInstance.options.address}`);
 }
