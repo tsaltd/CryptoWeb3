@@ -73,13 +73,13 @@ async function deployContract(web3, contract, sender) {
             console.log(`Transaction hash: ${transactionHash}`);
         })
         //.on('confirmation', (confirmationNumber, receipt) 
-        .on( `confirmation`, function(confirmationNumber, reciept)  {
-            console.log(`Confirmation number: ${confirmationNumber}`);
-        })
+        .on( "confirmation",confirmationNumber => {
+            console.log(`Confirmation number: ${confirmationNumber}`);               
+        });
 
-        .on("error", error => {
-            console.log(`Transaction Error: ${error.message}`);
-        })
+        // .on("error", error => {
+        //      console.log(`Transaction Error: ${error.message}`);
+        //  };
 
     console.log(`Contract address: ${contractInstance.options.address}`);
 }
