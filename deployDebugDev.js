@@ -2,6 +2,11 @@
 const fs = require('fs');
 const solc = require('solc');
 const Web3 = require('web3');
+const OPTIONS = {
+    defaultBlock: "latest",
+    transactionConfirmationBlocks: 1,
+    transactionBlockTimeout: 5
+};
 
 // eslint-disable-next-line no-use-before-define
 const contract = compileContract();
@@ -14,7 +19,8 @@ deployContract(web3, contract, sender)
         console.log('Deployment finished')
     })
     .catch(error => {
-        console.log(`Failed to deploy contract: ${JSON.stringify(error)}`); 
+        console.log(`Failed to deploy contract: ${JSON.stringify(error)}`);
+        console.log(`Failed to deploy contract: ${JSON.stringify(error.message)}`);
     });
 function compileContract() {
     const compilerInput = {
@@ -49,9 +55,9 @@ function compileContract() {
 }
 
 function createWeb3() {
-    return new Web3('http://127.0.0.1:8545');
+return new Web3('http://127.0.0.1:8545',null,OPTIONS);
+      //return new Web3('http://127.0.0.1:8545',null);
 }
-
 async function deployContract(web3, contract, sender) {
     const Voter = new web3.eth.Contract(contract.abi);
     const bytecode = '0x' + contract.evm.bytecode.object ;
@@ -66,20 +72,20 @@ async function deployContract(web3, contract, sender) {
     })
         .send({
             from: sender,
-            gas: gasEstimate
-            // gas: 1890202
+            //gas: gasEstimate
+            //gas: 70094208
+            gas: 994208
         })
         .on('transactionHash', function (transactionHash)  {
             console.log(`Transaction hash: ${transactionHash}`);
         })
-        //.on('confirmation', (confirmationNumber, receipt) 
-        .on( "confirmation",confirmationNumber => {
-            console.log(`Confirmation number: ${confirmationNumber}`);               
-        })
-
-        .on("error", error => {
-             console.log(`Transaction Error: ${error.message}`);
-         })
-
+        .on("confirmation", confirmationNumber => {
+            console.log("hello");
+            console.log(`Confirmation number: ${confirmationNumber}`);
+            })
+            .on("error", error => {
+            console.log(`Transaction error: ${JSON.stringify(error.message)}`);
+            console.log(`Transaction error: ${JSON.stringify(error)}`);
+        });
     console.log(`Contract address: ${contractInstance.options.address}`);
-}
+    }
